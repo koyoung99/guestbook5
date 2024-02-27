@@ -36,7 +36,7 @@ public class GuestDao {
 			// 3. SQL문 준비 / 바인딩 / 실행
 
 			String query = "";
-			query += " select no, name, password, content, reg_date ";
+			query += " select no, name, password, content, regDate ";
 			query += " from guestbook";
 
 			pstmt = conn.prepareStatement(query);
@@ -48,7 +48,7 @@ public class GuestDao {
 				String name = rs.getString("name");
 				String pw = rs.getString("password");
 				String content = rs.getString("content");
-				String regDate = rs.getString("reg_date");
+				String regDate = rs.getString("regDate");
 
 				GuestVo guestVo = new GuestVo(no, name, pw, content, regDate);
 
@@ -192,6 +192,73 @@ public class GuestDao {
 			}
 		}
 		return count;
+	}
+
+	public GuestVo guestSelectOne(int no) {
+
+		GuestVo guestVo=null;
+
+		// 0. import java.sql.*;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			// 1. JDBC 드라이버 (Oracle) 로딩
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// 2. Connection 얻어오기
+			String url = "jdbc:mysql://localhost:3306/guestbook_db";
+			conn = DriverManager.getConnection(url, "guestbook", "guestbook");
+
+			// 3. SQL문 준비 / 바인딩 / 실행
+
+			String query = "";
+			query += " select no, name, password, content ";
+			query += " from guestbook ";
+			query += " where no=?";
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, no);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {// 반복
+				no = rs.getInt("no");
+				String name = rs.getString("name");
+				String password = rs.getString("password");
+				String content = rs.getString("content");
+
+				// db에서 가져온 데이터 vo로 묶기
+				guestVo = new GuestVo(no, name, password, content);
+
+			}
+			
+		} catch (
+
+		ClassNotFoundException e) {
+			System.out.println("error: 드라이버 로딩 실패 - " + e);
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+
+			// 5. 자원정리
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+			}
+		}
+		return guestVo;
 	}
 
 }

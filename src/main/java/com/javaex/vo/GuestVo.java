@@ -26,6 +26,14 @@ public class GuestVo {
 		this.regDate = regDate;
 	}
 
+	public GuestVo(int no, String name, String password, String content) {
+		super();
+		this.no = no;
+		this.name = name;
+		this.password = password;
+		this.content = content;
+	}
+
 	public GuestVo(int no, String name, String password, String content, String regDate) {
 		super();
 		this.no = no;
