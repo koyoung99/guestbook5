@@ -15,7 +15,7 @@
 			<tr>
 				<td>비밀번호</td>
 				<td><input type="password" name="password"></td>
-
+				<input type="hidden" name="no" value="${guestVo.no}">
 				<td><button type="submit">삭제</button></td>
 
 
